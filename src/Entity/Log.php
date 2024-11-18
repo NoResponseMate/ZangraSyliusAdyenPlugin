@@ -10,7 +10,7 @@ class Log implements LogInterface
     /** @var int */
     protected $id;
 
-    /** @var ?int */
+    /** @var ?string */
     protected $token = null;
 
     /** @var int */
@@ -70,12 +70,12 @@ class Log implements LogInterface
         $this->dateTime = $dateTime;
     }
 
-    public function getToken(): ?int
+    public function getToken(): ?string
     {
         return $this->token;
     }
 
-    public function setToken(?int $token =  null): void
+    public function setToken(?string $token = null): void
     {
         $this->token = $token;
     }
