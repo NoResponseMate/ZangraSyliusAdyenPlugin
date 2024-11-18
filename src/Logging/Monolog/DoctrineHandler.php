@@ -52,7 +52,7 @@ final class DoctrineHandler extends AbstractProcessingHandler
         }
 
         $sessionId = substr($session->getId(), 0, 8) ?: '????????';
-        $sessionId = $sessionId . '-' . substr(uniqid(), -9);
+        $sessionId = $sessionId . '-' . substr(uniqid('', true), -8);
 
         return $sessionId;
     }
