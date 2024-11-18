@@ -14,6 +14,10 @@ sylius_grid:
           sortable: ~
           options:
             template: "@BitBagSyliusAdyenPlugin/Admin/Logger/_level.html.twig"
+        token:
+            type: string
+            sortable: ~
+            label: token
         errorCode:
           type: string
           label: bitbag_sylius_adyen_plugin.ui.logging.error_code
