@@ -25,11 +25,13 @@ final class LogFactory implements FactoryInterface, LogFactoryInterface
     public function create(
         string $message,
         int $level,
-        int $errorCode
+        int $errorCode,
+        ?int $token = null,
     ): LogInterface {
         /** @var LogInterface $log */
         $log = $this->createNew();
 
+        $log->setToken($token);
         $log->setMessage($message);
         $log->setLevel($level);
         $log->setErrorCode($errorCode);

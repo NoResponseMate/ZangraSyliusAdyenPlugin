@@ -25,4 +25,8 @@ interface LogInterface extends ResourceInterface
     public function getDateTime(): \DateTime;
 
     public function setDateTime(\DateTime $dateTime): void;
+
+    public function getToken(): ?int;
+
+    public function setToken(?int $token): void;
 }
