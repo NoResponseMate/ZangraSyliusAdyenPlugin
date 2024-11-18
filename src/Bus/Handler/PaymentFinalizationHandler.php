@@ -48,9 +48,10 @@ final class PaymentFinalizationHandler implements MessageHandlerInterface
     private function updatePaymentState(PaymentInterface $payment, string $transition): void
     {
         $stateMachine = $this->stateMachineFactory->get($payment, PaymentTransitions::GRAPH);
-        $this->adyenLogger->info('Z log, '.__METHOD__.' transition: '.$transition);
+        $this->adyenLogger->info('Zlog, '.__METHOD__.' transition: '.$transition);
+
         if (PaymentTransitions::TRANSITION_AUTHORIZE === $transition && $this->captureMethod === PaymentCommandFactoryInterface::CAPTURE_METHOD_AUTO) {
-            $this->adyenLogger->info('Z log, switching to complete transtition');
+            $this->adyenLogger->info('Zlog, switching to complete transtition');
             $transition = PaymentTransitions::TRANSITION_COMPLETE;
         }
 
