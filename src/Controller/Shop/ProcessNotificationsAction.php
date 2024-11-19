@@ -48,6 +48,9 @@ class ProcessNotificationsAction
 
     public function __invoke(string $code, Request $request): Response
     {
+        $this->logger->debug(sprintf(__METHOD__.':: Processing notification code: %s', $code));
+        $this->logger->debug(sprintf('Request data: %s', implode(', ', $request->request->all())));
+
         foreach ($this->notificationResolver->resolve($code, $request) as $notificationItem) {
             if (!$notificationItem->success) {
                 $this->logger->error(\sprintf(

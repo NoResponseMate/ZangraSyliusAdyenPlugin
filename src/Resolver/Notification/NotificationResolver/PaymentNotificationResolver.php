@@ -15,6 +15,7 @@ use BitBag\SyliusAdyenPlugin\Exception\UnmappedAdyenActionException;
 use BitBag\SyliusAdyenPlugin\Repository\AdyenReferenceRepositoryInterface;
 use BitBag\SyliusAdyenPlugin\Resolver\Notification\Struct\NotificationItemData;
 use Doctrine\ORM\NoResultException;
+use Psr\Log\LoggerInterface;
 use Sylius\Component\Core\Model\PaymentInterface;
 use Webmozart\Assert\Assert;
 
@@ -26,12 +27,17 @@ final class PaymentNotificationResolver implements CommandResolver
     /** @var AdyenReferenceRepositoryInterface */
     private $adyenReferenceRepository;
 
+    /** @var LoggerInterface  */
+    private $logger;
+
     public function __construct(
         DispatcherInterface $dispatcher,
-        AdyenReferenceRepositoryInterface $adyenReferenceRepository
+        AdyenReferenceRepositoryInterface $adyenReferenceRepository,
+        LoggerInterface $logger
     ) {
         $this->dispatcher = $dispatcher;
         $this->adyenReferenceRepository = $adyenReferenceRepository;
+        $this->logger = $logger;
     }
 
     private function fetchPayment(
@@ -63,12 +69,20 @@ final class PaymentNotificationResolver implements CommandResolver
                 $notificationData->originalReference
             );
 
+            $this->logger->debug(sprintf('Payment %s found with PSP: %s and original ref: %s',
+                    $payment->getId(),
+                    $notificationData->pspReference,
+                    $notificationData->originalReference
+                )
+            );
+
             return $this->dispatcher->getCommandFactory()->createForEvent(
                 (string) $notificationData->eventCode,
                 $payment,
                 $notificationData
             );
         } catch (UnmappedAdyenActionException $ex) {
+            $this->logger->debug('No payment action found');
             throw new NoCommandResolvedException();
         }
     }
