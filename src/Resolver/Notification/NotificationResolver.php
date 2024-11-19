@@ -89,6 +89,7 @@ final class NotificationResolver implements NotificationResolverInterface
             $result[] = $item;
         }
 
+        $this->logger->debug(sprintf('Resolved request data: %s', implode(', ', $result)));
         return $result;
     }
 }
