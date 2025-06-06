@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file has been created by developers from BitBag.
  * Feel free to contact us once you face any issues or want to start
@@ -23,15 +24,9 @@ final class RefundPaymentRepository implements RefundPaymentRepositoryInterface
         $this->baseRepository = $baseRepository;
     }
 
-    /**
-     * @psalm-suppress MixedReturnStatement
-     * @psalm-suppress MixedInferredReturnType
-     * @psalm-suppress MoreSpecificReturnType
-     * @psalm-suppress LessSpecificReturnStatement
-     */
     public function getForOrderNumberAndRefundPaymentId(
         string $orderNumber,
-        int $paymentId
+        int $paymentId,
     ): RefundPaymentInterface {
         $qb = $this->baseRepository->createQueryBuilder('rp');
         $qb
@@ -48,14 +43,11 @@ final class RefundPaymentRepository implements RefundPaymentRepositoryInterface
         return $qb->getQuery()->getSingleResult();
     }
 
-    /**
-     * @psalm-suppress MixedReturnStatement
-     * @psalm-suppress MixedInferredReturnType
-     * @psalm-suppress MoreSpecificReturnType
-     * @psalm-suppress LessSpecificReturnStatement
-     */
     public function find(int $id): ?RefundPaymentInterface
     {
-        return $this->baseRepository->find($id);
+        /** @var RefundPaymentInterface|null $result */
+        $result = $this->baseRepository->find($id);
+
+        return $result;
     }
 }

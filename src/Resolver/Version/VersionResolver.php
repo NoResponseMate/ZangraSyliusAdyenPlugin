@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file has been created by developers from BitBag.
  * Feel free to contact us once you face any issues or want to start
@@ -18,12 +19,6 @@ final class VersionResolver implements VersionResolverInterface
 
     private const TEST_APPLICATION_VERSION = 'dev';
 
-    /**
-     * @psalm-suppress MixedReturnStatement
-     * @psalm-suppress MixedInferredReturnType
-     * @psalm-suppress InternalClass
-     * @psalm-suppress InternalMethod
-     */
     private function getPluginVersion(): string
     {
         try {
@@ -34,7 +29,7 @@ final class VersionResolver implements VersionResolverInterface
             return substr(
                 FallbackVersions::getVersion(self::PACKAGE_NAME),
                 0,
-                -1
+                -1,
             );
         } catch (\Exception $ex) {
             return self::TEST_APPLICATION_VERSION;

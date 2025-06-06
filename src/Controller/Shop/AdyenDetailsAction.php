@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file has been created by developers from BitBag.
  * Feel free to contact us once you face any issues or want to start
@@ -23,13 +24,14 @@ class AdyenDetailsAction
     private $paymentDetailsResolver;
 
     public function __construct(
-        PaymentDetailsResolverInterface $paymentDetailsResolver
+        PaymentDetailsResolverInterface $paymentDetailsResolver,
     ) {
         $this->paymentDetailsResolver = $paymentDetailsResolver;
     }
 
     public function __invoke(Request $request, string $code): Response
     {
+        /** @var string|null $referenceId */
         $referenceId = $request->query->get(self::REFERENCE_ID_KEY);
 
         if (null === $referenceId) {

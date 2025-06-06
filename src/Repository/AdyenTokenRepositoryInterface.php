@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file has been created by developers from BitBag.
  * Feel free to contact us once you face any issues or want to start
@@ -17,12 +18,8 @@ use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 interface AdyenTokenRepositoryInterface extends RepositoryInterface
 {
-    /**
-     * @psalm-suppress MixedReturnStatement
-     * @psalm-suppress MixedInferredReturnType
-     */
     public function findOneByPaymentMethodAndCustomer(
         PaymentMethodInterface $paymentMethod,
-        CustomerInterface $customer
+        CustomerInterface $customer,
     ): ?AdyenTokenInterface;
 }

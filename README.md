@@ -51,6 +51,7 @@ It supports all methods available to [drop-in](https://docs.adyen.com/online-pay
 | **Payments** |
 | [Payment dropin](https://docs.adyen.com/online-payments/web-drop-in) | Yes |
 | [Card payments](https://docs.adyen.com/payment-methods/cards) | Yes |
+| [Bizum](https://docs.adyen.com/payment-methods/bizum) (Spain only) | Yes |
 | [3D Secure](https://docs.adyen.com/online-payments/3d-secure) | Yes |
 | **Wallet payments** |
 | [WeChat Pay](https://docs.adyen.com/payment-methods/wechat-pay) | Yes |
@@ -71,6 +72,7 @@ It supports all methods available to [drop-in](https://docs.adyen.com/online-pay
 | [Capture](https://docs.adyen.com/issuing/payment-stages#captures) | Yes |
 | [Partial refunds](https://docs.adyen.com/issuing/payment-stages#refunds) | Yes |
 
+If you want to learn more about plugins functionalities, please go under this [link](https://github.com/BitBagCommerce/SyliusAdyenPlugin/blob/master/doc/functionalities.md).
 
 ## We are here to help
 This **open-source plugin was developed to help the Sylius community** and make Adyen payments platform available to any Sylius store. If you have any additional questions, would like help with installing or configuring the plugin or need any assistance with your Sylius project - let us know!
@@ -91,9 +93,9 @@ We work on stable, supported and up-to-date versions of packages. We recommend y
 | ext-json:  | *                  |
 | sylius/refund-plugin | ^1.0.0             |
 | sylius/resource-bundle | ^1.8               |
-| sylius/sylius | ^1.11.0 or ^1.12.0 |
-| symfony/messenger | ^5.4               |
-| adyen/php-api-library | ^10.1              |
+| sylius/sylius | ~1.12.0 or ~1.13.0 |
+| symfony/messenger | ^5.4 or ^6.0       |
+| adyen/php-api-library | ^11.0              |
 
 ----
 
@@ -161,6 +163,7 @@ $ bin/console doctrine:database:create -e test
 $ bin/console doctrine:schema:create -e test
 $ yarn install
 $ yarn encore dev
+$ yarn gulp
 $ bin/console server:run 127.0.0.1:8080 -e test
 $ bin/phpunit
 $ bin/behat

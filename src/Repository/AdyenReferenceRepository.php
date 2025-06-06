@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file has been created by developers from BitBag.
  * Feel free to contact us once you face any issues or want to start
@@ -33,19 +34,12 @@ final class AdyenReferenceRepository extends EntityRepository implements AdyenRe
         return $qb;
     }
 
-    /**
-     * @psalm-suppress MixedReturnStatement
-     * @psalm-suppress MixedInferredReturnType
-     */
     public function getOneByCodeAndReference(string $code, string $pspReference): AdyenReferenceInterface
     {
         return $this->getQueryBuilderForCodeAndReference($code, $pspReference)->getQuery()->getSingleResult();
     }
 
     /**
-     * @psalm-suppress MixedReturnStatement
-     * @psalm-suppress MixedInferredReturnType
-     *
      * @throws NoResultException
      */
     public function getOneForRefundByCodeAndReference(string $code, string $pspReference): AdyenReferenceInterface

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file has been created by developers from BitBag.
  * Feel free to contact us once you face any issues or want to start
@@ -33,7 +34,7 @@ final class ClientPayloadFactory implements ClientPayloadFactoryInterface
     /** @var RequestStack */
     private $requestStack;
 
-    /** @var array */
+    /** @var string[] */
     private $allowedMethodsList = [
         'ideal',
         'paypal',
@@ -42,6 +43,7 @@ final class ClientPayloadFactory implements ClientPayloadFactoryInterface
         'googlepay',
         'alipay',
         'twint',
+        'bizum',
         'blik',
         'dotpay',
         'scheme',
@@ -78,7 +80,7 @@ final class ClientPayloadFactory implements ClientPayloadFactoryInterface
     public function createForAvailablePaymentMethods(
         ArrayObject $options,
         OrderInterface $order,
-        ?AdyenTokenInterface $adyenToken = null
+        ?AdyenTokenInterface $adyenToken = null,
     ): array {
         $address = $order->getBillingAddress();
         $countryCode = null !== $address ? (string) $address->getCountryCode() : '';
@@ -106,7 +108,7 @@ final class ClientPayloadFactory implements ClientPayloadFactoryInterface
 
     public function createForPaymentDetails(
         array $receivedPayload,
-        ?AdyenTokenInterface $adyenToken = null
+        ?AdyenTokenInterface $adyenToken = null,
     ): array {
         $payload = $this->injectShopperReference($receivedPayload, $adyenToken);
         $payload = $this->enableOneOffPaymentIfApplicable($payload, $adyenToken);
@@ -120,7 +122,7 @@ final class ClientPayloadFactory implements ClientPayloadFactoryInterface
         string $url,
         array $receivedPayload,
         OrderInterface $order,
-        ?AdyenTokenInterface $adyenToken = null
+        ?AdyenTokenInterface $adyenToken = null,
     ): array {
         $billingAddress = $order->getBillingAddress();
         $countryCode = null !== $billingAddress
@@ -152,7 +154,7 @@ final class ClientPayloadFactory implements ClientPayloadFactoryInterface
         $payload = $this->enableOneOffPaymentIfApplicable(
             $payload,
             $adyenToken,
-            (bool) ($receivedPayload['storePaymentMethod'] ?? false)
+            (bool) ($receivedPayload['storePaymentMethod'] ?? false),
         );
         $payload = $this->versionResolver->appendVersionConstraints($payload);
 
@@ -163,7 +165,7 @@ final class ClientPayloadFactory implements ClientPayloadFactoryInterface
 
     public function createForCapture(
         ArrayObject $options,
-        PaymentInterface $payment
+        PaymentInterface $payment,
     ): array {
         $payload = [
             'merchantAccount' => $options['merchantAccount'],
@@ -181,7 +183,7 @@ final class ClientPayloadFactory implements ClientPayloadFactoryInterface
 
     public function createForCancel(
         ArrayObject $options,
-        PaymentInterface $payment
+        PaymentInterface $payment,
     ): array {
         $params = [
             'merchantAccount' => $options['merchantAccount'],
@@ -196,7 +198,7 @@ final class ClientPayloadFactory implements ClientPayloadFactoryInterface
     public function createForTokenRemove(
         ArrayObject $options,
         string $paymentReference,
-        AdyenTokenInterface $adyenToken
+        AdyenTokenInterface $adyenToken,
     ): array {
         $params = [
             'merchantAccount' => $options['merchantAccount'],
@@ -212,7 +214,7 @@ final class ClientPayloadFactory implements ClientPayloadFactoryInterface
     public function createForRefund(
         ArrayObject $options,
         PaymentInterface $payment,
-        RefundPaymentGenerated $refund
+        RefundPaymentGenerated $refund,
     ): array {
         $order = $payment->getOrder();
         Assert::notNull($order);
@@ -234,7 +236,7 @@ final class ClientPayloadFactory implements ClientPayloadFactoryInterface
 
     private function filterArray(array $payload, array $keysWhitelist): array
     {
-        return array_filter($payload, function (string $key) use ($keysWhitelist): bool {
+        return array_filter($payload, function ($key) use ($keysWhitelist): bool {
             return in_array($key, $keysWhitelist, true);
         }, \ARRAY_FILTER_USE_KEY);
     }
@@ -244,7 +246,7 @@ final class ClientPayloadFactory implements ClientPayloadFactoryInterface
         return (array) $this->normalizer->normalize(
             $order,
             null,
-            [AbstractPaymentNormalizer::NORMALIZER_ENABLED => true]
+            [AbstractPaymentNormalizer::NORMALIZER_ENABLED => true],
         );
     }
 
@@ -261,7 +263,7 @@ final class ClientPayloadFactory implements ClientPayloadFactoryInterface
             $pattern,
             $components[AdyenClientInterface::CREDIT_CARD_TYPE] ?? '',
             $components['host'] ?? '',
-            $components['port'] ?? 0
+            $components['port'] ?? 0,
         );
     }
 
@@ -272,8 +274,8 @@ final class ClientPayloadFactory implements ClientPayloadFactoryInterface
         }
 
         if (
-            isset($payload['paymentMethod']['type'])
-            && AdyenClientInterface::CREDIT_CARD_TYPE !== $payload['paymentMethod']['type']
+            isset($payload['paymentMethod']['type']) &&
+            AdyenClientInterface::CREDIT_CARD_TYPE !== $payload['paymentMethod']['type']
         ) {
             return false;
         }
@@ -283,7 +285,7 @@ final class ClientPayloadFactory implements ClientPayloadFactoryInterface
 
     private function injectShopperReference(
         array $payload,
-        ?AdyenTokenInterface $customerIdentifier
+        ?AdyenTokenInterface $customerIdentifier,
     ): array {
         if (null !== $customerIdentifier) {
             $payload['shopperReference'] = $customerIdentifier->getIdentifier();
@@ -295,8 +297,8 @@ final class ClientPayloadFactory implements ClientPayloadFactoryInterface
     private function add3DSecureFlags(array $receivedPayload, array $payload): array
     {
         if (
-            isset($receivedPayload['paymentMethod']['type'])
-            && 'scheme' == $receivedPayload['paymentMethod']['type']
+            isset($receivedPayload['paymentMethod']['type']) &&
+            'scheme' == $receivedPayload['paymentMethod']['type']
         ) {
             $payload['additionalData'] = [
                 'allow3DS2' => true,
@@ -309,7 +311,7 @@ final class ClientPayloadFactory implements ClientPayloadFactoryInterface
     private function enableOneOffPaymentIfApplicable(
         array $payload,
         ?AdyenTokenInterface $customerIdentifier,
-        bool $store = false
+        bool $store = false,
     ): array {
         if (!$this->isTokenizationSupported($payload, $customerIdentifier)) {
             return $payload;

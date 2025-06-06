@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file has been created by developers from BitBag.
  * Feel free to contact us once you face any issues or want to start
@@ -27,23 +28,14 @@ final class PaymentMethodRepository implements PaymentMethodRepositoryInterface
         $this->baseRepository = $baseRepository;
     }
 
-    /**
-     * @psalm-suppress MixedReturnStatement
-     * @psalm-suppress MixedInferredReturnType
-     * @psalm-suppress MoreSpecificReturnType
-     * @psalm-suppress LessSpecificReturnStatement
-     */
     public function find(int $id): ?PaymentMethodInterface
     {
-        return $this->baseRepository->find($id);
+        /** @var PaymentMethodInterface|null $result */
+        $result = $this->baseRepository->find($id);
+
+        return $result;
     }
 
-    /**
-     * @psalm-suppress MixedReturnStatement
-     * @psalm-suppress MixedInferredReturnType
-     * @psalm-suppress MoreSpecificReturnType
-     * @psalm-suppress LessSpecificReturnStatement
-     */
     public function getOneForAdyenAndCode(string $code): PaymentMethodInterface
     {
         return $this->baseRepository->createQueryBuilder('o')
@@ -66,9 +58,6 @@ final class PaymentMethodRepository implements PaymentMethodRepositoryInterface
         }
     }
 
-    /**
-     * @psalm-suppress QueryBuilderSetParameter
-     */
     private function getQueryForChannel(ChannelInterface $channel): QueryBuilder
     {
         return $this->baseRepository->createQueryBuilder('o')
@@ -82,10 +71,6 @@ final class PaymentMethodRepository implements PaymentMethodRepositoryInterface
         ;
     }
 
-    /**
-     * @psalm-suppress MixedReturnStatement
-     * @psalm-suppress MixedInferredReturnType
-     */
     public function findOneByChannel(ChannelInterface $channel): ?PaymentMethodInterface
     {
         return $this
@@ -98,8 +83,6 @@ final class PaymentMethodRepository implements PaymentMethodRepositoryInterface
 
     /**
      * @return array<int, PaymentMethodInterface>
-     * @psalm-suppress MixedInferredReturnType
-     * @psalm-suppress MixedReturnStatement
      */
     public function findAllByChannel(ChannelInterface $channel): array
     {

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file has been created by developers from BitBag.
  * Feel free to contact us once you face any issues or want to start
@@ -17,19 +18,15 @@ use Sylius\Component\Core\Model\PaymentMethodInterface;
 
 final class AdyenTokenRepository extends EntityRepository implements AdyenTokenRepositoryInterface
 {
-    /**
-     * @psalm-suppress MixedReturnStatement
-     * @psalm-suppress MixedInferredReturnType
-     * @psalm-suppress MoreSpecificReturnType
-     * @psalm-suppress LessSpecificReturnStatement
-     */
     public function findOneByPaymentMethodAndCustomer(
         PaymentMethodInterface $paymentMethod,
-        CustomerInterface $customer
+        CustomerInterface $customer,
     ): ?AdyenTokenInterface {
-        return $this->findOneBy([
+        $result = $this->findOneBy([
             'paymentMethod' => $paymentMethod,
             'customer' => $customer,
         ]);
+
+        return $result instanceof AdyenTokenInterface ? $result : null;
     }
 }

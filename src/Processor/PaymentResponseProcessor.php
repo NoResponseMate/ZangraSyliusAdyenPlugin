@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file has been created by developers from BitBag.
  * Feel free to contact us once you face any issues or want to start
@@ -19,18 +20,18 @@ final class PaymentResponseProcessor implements PaymentResponseProcessorInterfac
 {
     private const DEFAULT_REDIRECT_ROUTE = 'sylius_shop_order_thank_you';
 
-    /** @var ProcessorInterface[] */
+    /** @var iterable<ProcessorInterface> */
     private $processors;
 
     /** @var UrlGeneratorInterface */
     private $urlGenerator;
 
     /**
-     * @param ProcessorInterface[] $processors
+     * @param iterable<ProcessorInterface> $processors
      */
     public function __construct(
         iterable $processors,
-        UrlGeneratorInterface $urlGenerator
+        UrlGeneratorInterface $urlGenerator,
     ) {
         $this->processors = $processors;
         $this->urlGenerator = $urlGenerator;
@@ -39,7 +40,7 @@ final class PaymentResponseProcessor implements PaymentResponseProcessorInterfac
     private function processForPaymentSpecified(
         string $code,
         Request $request,
-        PaymentInterface $payment
+        PaymentInterface $payment,
     ): ?string {
         foreach ($this->processors as $processor) {
             if (!$processor->accepts($request, $payment)) {
@@ -55,7 +56,7 @@ final class PaymentResponseProcessor implements PaymentResponseProcessorInterfac
     public function process(
         string $code,
         Request $request,
-        ?PaymentInterface $payment
+        ?PaymentInterface $payment,
     ): string {
         $result = null;
         if (null !== $payment) {
