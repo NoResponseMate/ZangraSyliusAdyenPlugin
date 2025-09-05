@@ -16,6 +16,7 @@
 /public/bundles
 /var/
 /vendor/
+.php-version
 ###< symfony/framework-bundle ###
 
 ###> symfony/web-server-bundle ###
