@@ -5,6 +5,7 @@
 !/public/media/image/
 /public/media/image/*
 !/public/media/image/.gitignore
+/public/build/
 
 /node_modules
 
