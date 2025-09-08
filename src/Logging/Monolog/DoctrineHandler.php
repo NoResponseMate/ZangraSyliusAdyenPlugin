@@ -53,10 +53,10 @@ final class DoctrineHandler extends AbstractProcessingHandler
         try {
             $session = $this->requestStack->getSession();
         } catch (SessionNotFoundException $e) {
-            $session = '';
+            return '';
         }
         if (!$session->isStarted()) {
-            $session = '';
+            return '';
         }
 
         $sessionId = substr($session->getId(), 0, 8) ?: '????????';

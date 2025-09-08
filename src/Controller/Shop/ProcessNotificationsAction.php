@@ -67,7 +67,7 @@ class ProcessNotificationsAction
                 $command = $this->notificationCommandResolver->resolve($code, $notificationItem);
                 $this->dispatcher->dispatch($command);
             } catch (NoCommandResolvedException $ex) {
-                $this->logger->error('Tried to dispatch an unknown command: ' . json_encode($notificationItem));
+                $this->logger->error('Tried to dispatch an unknown command');
             }
         }
 
